@@ -1,5 +1,12 @@
 // Chananel Zaguri - BYC project
 
+const client = contentful.createClient({
+    // This is the space ID. A space is like a project folder in Contentful terms
+    space: "58b7p5dzqrcq",
+    // This is the access token for this space. Normally you get both ID and the token in the Contentful web app
+    accessToken: "MTUO8EvV9bAIXiriyT5HMuvb3dQum6QOlaAL9gP8Reo"
+});
+
 const cartBtn = document.querySelector(".cart-btn");
 const closeCartBtn = document.querySelector(".close-cart");
 const clearCartBtn = document.querySelector(".clear-cart");
@@ -20,10 +27,16 @@ class Products {
     async getProducts() {
         try {
             // get data from local/content-full
+
+            let contentful = await client.getEntries({
+                content_type: "cateringProduct"
+            });
+
             let result = await fetch("products.json");
             let data = await result.json();
 
-            let products = data.items;
+            // let products =  data.items;
+            let products =  contentful.items;
             products = products.map(item => {
                 const {title, price} = item.fields;
                 const {id} = item.sys;
